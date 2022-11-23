@@ -6,7 +6,7 @@
 stages:
  - stage: Dev
    dependsOn: CI
-   CONDITION: succeeded('CI')
+   condition: succeeded('CI')
    displayName: 'Deploy App to Dev Slot'
    jobs:
       - job:  DeployApp
