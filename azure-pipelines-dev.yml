@@ -17,7 +17,7 @@ stages:
             sourceFolder: '$(System.DefaultWorkingDirectory)'
             contents: '**/*.jar'
             targetFolder: '$(Build.ArtifactStagingDirectory)'
-        - task: PublishBuildArtifacts@2
+        - task: PublishBuildArtifacts@1
           inputs:
            buildType: 'current'
            artifactName: 'jar'
