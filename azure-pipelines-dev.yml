@@ -20,7 +20,7 @@ stages:
         - task: AzureRmWebAppDeployment@4
           inputs:
             ConnectionType: 'AzureRM'
-            azureSubscription: 'Free Trial'
+            azureSubscription: 'feb07b51-614b-44d2-9f84-620cf7f5f148'
             appType: 'webApp'
             WebAppName: 'spring-mvc-demo'
             deployToSlotOrASE: true
