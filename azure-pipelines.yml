@@ -29,5 +29,5 @@ stages:
        publishJUnitResults: true
        testResultsFiles: '**/surefire-reports/TEST-*.xml'
        goals: 'package'
-- template: 'azure-pipelines-dev.yml'       
+- template: azure-pipelines-dev.yml     
  
