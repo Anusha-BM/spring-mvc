@@ -12,6 +12,10 @@ stages:
       - job:  DeployApp
         displayName: 'Deploy App'
         steps:
+        - task: CopyFiles@2
+          inputs:
+            contents: '**/*.jar'
+            targetFolder: '$(Build.ArtifactStagingDirectory)'
         - task: DownloadPipelineArtifact@2
           inputs:
            buildType: 'current'
