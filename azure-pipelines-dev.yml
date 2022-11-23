@@ -12,6 +12,7 @@ stages:
       - job:  DeployApp
         displayName: 'Deploy App'
         steps:
+        - task: PublishBuildArtifacts@1
        # - task: DownloadPipelineArtifact@2
        #   inputs:
         #    buildType: 'current'
