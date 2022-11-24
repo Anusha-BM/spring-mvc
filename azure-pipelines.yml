@@ -16,7 +16,8 @@ variables:
 
   # Agent VM image name
   vmImageName: ' windows-latest'
-
+pool:
+  vmImage: windows-latest
 stages:
 - stage: Build
   displayName: Build stage
@@ -50,14 +51,10 @@ stages:
   dependsOn: Build
   condition: succeeded()
   jobs:
-  - deployment: DeployDev
-    displayName: Deploy Windows Web App
-    pool: 
-      vmImage: $(vmImageName)
-    strategy:
-      runOnce:
-        deploy:
-          steps:
+   - job:  DeployApp
+     displayName: Deploy Windows Web App
+     
+     steps:
            - task: DownloadPipelineArtifact@2
              displayName: 'Download Pipeline Artifact'
              inputs:
