@@ -13,14 +13,20 @@ stages:
         displayName: 'Deploy App'
         steps:
         - task: CopyFiles@2
+          displayName: 'Copy Files to artifact staging directory'
           inputs:
-            sourceFolder: '$(System.DefaultWorkingDirectory)'
-            contents: '**/*.jar'
-            targetFolder: '$(Build.ArtifactStagingDirectory)'
+           SourceFolder: '$(System.DefaultWorkingDirectory)'
+           Contents: '**/target/*.jar'
+           TargetFolder: $(Build.ArtifactStagingDirectory)
+        - task: PublishPipelineArtifact@1
+          displayName: 'Publish Pipeline Artifact'
+          inputs:
+            artifact: '$(ArtifactName)'
+            targetPath: $(publish_directory)
         - task: DownloadBuildArtifacts@0
           inputs:
            buildType: 'current'
-           artifactName: 'jar'
+           artifactName: '$(ArtifactName)'
            downloadPath: '$(Pipeline.Workspace)'
         - task: AzureRmWebAppDeployment@4
           inputs:
@@ -31,4 +37,4 @@ stages:
             deployToSlotOrASE: true
             ResourceGroupName: 'spring-mvc-demo_group'
             SlotName: 'Dev'
-            packageForLinux: '$(Pipeline.Workspace)/**/*.jar'
+            packageForLinux: '$(Pipeline.Workspace)/$(ArtifactName)/**/target/*.jar'
