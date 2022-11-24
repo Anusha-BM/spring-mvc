@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
 
 trigger:
-- master
+- none
 
 variables:
 
@@ -50,8 +50,8 @@ stages:
   dependsOn: Build
   condition: succeeded()
   jobs:
-  - deployment: DeployLinuxWebApp
-    displayName: Deploy Linux Web App
+  - deployment: DeployDev
+    displayName: Deploy Windows Web App
     environment: 'development'
     pool: 
       vmImage: $(vmImageName)
@@ -63,11 +63,14 @@ stages:
              displayName: 'Download Pipeline Artifact'
              inputs:
               buildType: 'current'
-
-           - task: AzureWebApp@1
-             displayName: 'Azure Web App Deploy: gs-spring-boot'
+              
+           - task: AzureRmWebAppDeployment@4
+             displayName: 'Azure Web App Deploy: spring-mvc'
              inputs:
-              azureSubscription: $(azureSubscription)
-              appType: webAppLinux
-              appName: $(webAppName)
-              package: '$(System.ArtifactsDirectory)/drop/**/target/*.jar'
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'springazure'
+              appType: 'webApp'
+              WebAppName: 'spring-mvc-demo'
+              ResourceGroupName: 'spring-mvc-demo_group'
+              SlotName: 'Dev'
+              packageForLinux: '$(System.ArtifactsDirectory)/drop/**/target/*.jar'
