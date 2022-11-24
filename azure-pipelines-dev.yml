@@ -17,11 +17,11 @@ stages:
             sourceFolder: '$(System.DefaultWorkingDirectory)'
             contents: '**/*.jar'
             targetFolder: '$(Build.ArtifactStagingDirectory)'
-        - task: PublishBuildArtifacts@1
+        - task: DownloadBuildArtifacts@0
           inputs:
            buildType: 'current'
            artifactName: 'jar'
-           targetPath: '$(System.DefaultWorkingDirectory)'
+           downloadPath: '$(Pipeline.Workspace)'
         - task: AzureRmWebAppDeployment@4
           inputs:
             ConnectionType: 'AzureRM'
@@ -31,4 +31,4 @@ stages:
             deployToSlotOrASE: true
             ResourceGroupName: 'spring-mvc-demo_group'
             SlotName: 'Dev'
-            packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.jar'
+            packageForLinux: '$(Pipeline.Workspace)/**/*.jar'
