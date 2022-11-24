@@ -58,4 +58,4 @@ stages:
               WebAppName: 'spring-mvc-demo'
               ResourceGroupName: 'spring-mvc-demo_group'
               SlotName: 'Dev'
-              packageForLinux: '$(System.ArtifactsDirectory)/drop/**/target/*.jar'
+              packageForLinux: '$(System.ArtifactsDirectory)/target/*.jar'
