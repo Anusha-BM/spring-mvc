@@ -6,18 +6,9 @@
 trigger:
 - none
 
-variables:
-
-  # Azure Resource Manager connection created during pipeline creation
-  azureSubscription: 'springazure'
-  
-  # Web app name
-  webAppName: 'spring-mvc-demo'
-
-  # Agent VM image name
-  vmImageName: ' windows-latest'
 pool:
   vmImage: windows-latest
+  
 stages:
 - stage: Build
   displayName: Build stage
