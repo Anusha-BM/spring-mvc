@@ -52,7 +52,6 @@ stages:
   jobs:
   - deployment: DeployDev
     displayName: Deploy Windows Web App
-    environment: 'development'
     pool: 
       vmImage: $(vmImageName)
     strategy:
