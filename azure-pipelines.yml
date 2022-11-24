@@ -48,6 +48,7 @@ stages:
              displayName: 'Download Pipeline Artifact'
              inputs:
               buildType: 'current'
+              artifactName: 'GEN'
               targetPath: '$(Pipeline.Workspace)'
               
            - task: AzureRmWebAppDeployment@4
@@ -59,4 +60,4 @@ stages:
               WebAppName: 'spring-mvc-demo'
               ResourceGroupName: 'spring-mvc-demo_group'
               SlotName: 'Dev'
-              packageForLinux: '$(Pipeline.Workspace)/target/emp-0.0.1-SNAPSHOT.jar'
+              packageForLinux: '$(Pipeline.Workspace)/GEN/emp-0.0.1-SNAPSHOT.jar'
