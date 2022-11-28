@@ -59,3 +59,24 @@ stages:
               WebAppName: 'spring-mvc-demo'
               ResourceGroupName: 'spring-mvc-demo_group'
               packageForLinux: '$(Pipeline.Workspace)/**/target/emp-0.0.1-SNAPSHOT.jar'
+              
+              jobs:
+   - job:  SIT
+     displayName: Deploy Windows Web App to SIT
+     
+     steps:
+           - task: DownloadPipelineArtifact@2
+             displayName: 'Download Pipeline Artifact'
+             inputs:
+              buildType: 'current'
+              targetPath: '$(Pipeline.Workspace)'
+              
+           - task: AzureRmWebAppDeployment@4
+             displayName: 'Azure Web App Deploy to SIT: spring-mvc'
+             inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'springazure'
+              appType: 'webApp'
+              WebAppName: 'spring-mvc-demo_group'
+              ResourceGroupName: 'spring-mvc-demo_group'
+              packageForLinux: '$(Pipeline.Workspace)/**/target/emp-0.0.1-SNAPSHOT.jar'
