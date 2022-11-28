@@ -77,6 +77,6 @@ stages:
               ConnectionType: 'AzureRM'
               azureSubscription: 'springazure'
               appType: 'webApp'
-              WebAppName: 'spring-mvc-demo_group'
+              WebAppName: 'spring-mvc-demo-sit'
               ResourceGroupName: 'spring-mvc-demo_group'
               packageForLinux: '$(Pipeline.Workspace)/**/target/emp-0.0.1-SNAPSHOT.jar'
