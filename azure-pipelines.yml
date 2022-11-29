@@ -60,7 +60,6 @@ stages:
               ResourceGroupName: 'spring-mvc-demo_group'
               packageForLinux: '$(Pipeline.Workspace)/**/target/emp-0.0.1-SNAPSHOT.jar'
               
-              jobs:
    - job:  SIT
      displayName: Deploy Windows Web App to SIT
      
