@@ -1,0 +1,40 @@
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+stages:
+ - stage: Dev
+   dependsOn: CI
+   condition: succeeded('CI')
+   displayName: 'Deploy App to Dev Slot'
+   jobs:
+      - job:  DeployApp
+        displayName: 'Deploy App'
+        steps:
+        - task: CopyFiles@2
+          displayName: 'Copy Files to artifact staging directory'
+          inputs:
+           SourceFolder: '$(System.DefaultWorkingDirectory)'
+           Contents: '**/target/*.jar'
+           TargetFolder: $(Build.ArtifactStagingDirectory)
+        - task: PublishPipelineArtifact@1
+          displayName: 'Publish Pipeline Artifact'
+          inputs:
+            artifact: '$(ArtifactName)'
+            targetPath: $(publish_directory)
+        - task: DownloadBuildArtifacts@0
+          inputs:
+           buildType: 'current'
+           artifactName: '$(ArtifactName)'
+           downloadPath: '$(Pipeline.Workspace)'
+        - task: AzureRmWebAppDeployment@4
+          inputs:
+            ConnectionType: 'AzureRM'
+            azureSubscription: 'springazure'
+            appType: 'webApp'
+            WebAppName: 'spring-mvc-demo'
+            deployToSlotOrASE: true
+            ResourceGroupName: 'spring-mvc-demo_group'
+            SlotName: 'Dev'
+            packageForLinux: '$(Pipeline.Workspace)/$(ArtifactName)/**/target/*.jar'

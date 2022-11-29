@@ -1,0 +1,81 @@
+# Maven package Java project Web App to Linux on Azure
+# Build your Java project and deploy it to Azure as a Linux web app
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+trigger:
+- none
+
+pool:
+  vmImage: windows-latest
+  
+stages:
+- stage: Build
+  displayName: Build stage
+  jobs:
+  - job: MavenPackageAndPublishArtifacts
+    displayName: Maven Package and Publish Artifacts
+    
+    steps:
+     - task: Maven@3
+       displayName: 'Maven Package'
+       inputs:
+        mavenPomFile: 'pom.xml'
+        goals: 'package'
+
+     - task: CopyFiles@2
+       displayName: 'Copy Files to artifact staging directory'
+       inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: '**/target/*.jar'
+        TargetFolder: $(Build.ArtifactStagingDirectory)
+       
+     - task: PublishPipelineArtifact@1
+       displayName: 'Publish pipeline artifacts'
+       inputs:
+        targetPath: $(Build.ArtifactStagingDirectory)
+
+- stage: Deploy
+  displayName: Deploy stage
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+   - job:  DeployApp
+     displayName: Deploy Windows Web App
+     
+     steps:
+           - task: DownloadPipelineArtifact@2
+             displayName: 'Download Pipeline Artifact'
+             inputs:
+              buildType: 'current'
+              targetPath: '$(Pipeline.Workspace)'
+              
+           - task: AzureRmWebAppDeployment@4
+             displayName: 'Azure Web App Deploy: spring-mvc'
+             inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'springazure'
+              appType: 'webApp'
+              WebAppName: 'spring-mvc-demo'
+              ResourceGroupName: 'spring-mvc-demo_group'
+              packageForLinux: '$(Pipeline.Workspace)/**/target/emp-0.0.1-SNAPSHOT.jar'
+              
+   - job:  SIT
+     displayName: Deploy Windows Web App to SIT
+     
+     steps:
+           - task: DownloadPipelineArtifact@2
+             displayName: 'Download Pipeline Artifact'
+             inputs:
+              buildType: 'current'
+              targetPath: '$(Pipeline.Workspace)'
+              
+           - task: AzureRmWebAppDeployment@4
+             displayName: 'Azure Web App Deploy to SIT: spring-mvc'
+             inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'springazure'
+              appType: 'webApp'
+              WebAppName: 'spring-mvc-demo-sit'
+              ResourceGroupName: 'spring-mvc-demo_group'
+              packageForLinux: '$(Pipeline.Workspace)/**/target/emp-0.0.1-SNAPSHOT.jar'
